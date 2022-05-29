@@ -32,7 +32,7 @@ export default class TodoListItem extends Component {
 		if (important) {
 			classNames += ' important';
 		}
-		const { label } = this.props;
+		const { label, onDeleted } = this.props;
 		
 		return (
 			<span className={classNames}>
@@ -40,7 +40,7 @@ export default class TodoListItem extends Component {
 				<button type="button" className="btn btn-outline-success btn-sm float-right" onClick={this.onMarckImportant} >
 					<i className="fa fa-exclamation" />
 				</button>
-				<button type="button" className="btn btn-outline-danger btn-sm float-left bi-basket">
+				<button type="button" className="btn btn-outline-danger btn-sm float-left bi-basket" onClick={onDeleted} >
 					<i className="fa fa-trash-0" />
 				</button>
 			</span>
