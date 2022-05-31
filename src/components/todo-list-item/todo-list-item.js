@@ -44,7 +44,7 @@ export default class TodoListItem extends Component {
 					<i className="fa fa-trash-0" />
 				</button>
 			</span>
-		)
+		) 
 	}
 }
 
