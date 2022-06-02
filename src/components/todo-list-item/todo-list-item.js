@@ -2,29 +2,9 @@ import React, { Component } from "react";
 import './todo-list-item.css'
 
 export default class TodoListItem extends Component {
-	state = {
-		done: false,
-		important: false
-	};
-	onClickLabel = () => {
-		this.setState(({ done }) => {
-			return {
-				done: !done
-			}
-		}
 
-		)
-	};
-	onMarckImportant = () => {
-		this.setState(({ important }) => {
-			return {
-				important: !important
-			}
-		}
-		)
-	}
 	render() {
-		const { done, important } = this.state;
+		const { label, onDeleted, onTogleImportant, onTogleDone, done, important } = this.props;
 		let classNames = 'todo-list-item';
 		if (done) {
 			classNames += ' done';
@@ -32,12 +12,10 @@ export default class TodoListItem extends Component {
 		if (important) {
 			classNames += ' important';
 		}
-		const { label, onDeleted } = this.props;
-
 		return (
 			<span className={classNames}>
-				<span className="todo-list-item-label" onClick={this.onClickLabel} >{label}</span>
-				<button type="button" className="btn btn-outline-success btn-sm float-right" onClick={this.onMarckImportant} >
+				<span className="todo-list-item-label" onClick={onTogleDone} >{label}</span>
+				<button type="button" className="btn btn-outline-success btn-sm float-right" onClick={onTogleImportant} >
 					<i className="fa fa-exclamation" />
 				</button>
 				<button type="button" className="btn btn-outline-danger btn-sm float-left bi-basket" onClick={onDeleted} >

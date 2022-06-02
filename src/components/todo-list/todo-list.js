@@ -4,14 +4,16 @@ import './todo-list.css'
 export default class TodoList extends Component {
 
 	render() {
-		const { todos, onDeleted } = this.props;
+		const { todos, onDeleted, onTogleImportant, onTogleDone } = this.props;
 		const elements = todos.map((item) => {
 			const { id, ...itemProps } = item;
 
 			return (
 				<li key={id} className="list-group-item">
 					<TodoListItem {...itemProps}
-						onDeleted={() => onDeleted(id)} />
+						onDeleted={() => onDeleted(id)}
+						onTogleDone={() => onTogleDone(id)}
+						onTogleImportant={() => onTogleImportant(id)} />
 				</li>)
 		}
 		)

@@ -11,10 +11,18 @@ export default class App extends Component {
 	uniqueId = 100;
 	state = {
 		propertyList: [
-			{ label: "Drink Cofee", important: "false", id: 1 },
-			{ label: "Learn React", important: "true", id: 2 },
-			{ label: "Build React App", important: "false", id: 3 },
+			this.creationPropertyList('Drink coffee'),
+			this.creationPropertyList("Learn React"), 
+			this.creationPropertyList("Build React App")
 		]
+	}
+	creationPropertyList(label) {
+		return {
+			label,
+			important: false, 
+			done: false,
+			id: this.uniqueId++
+		}
 	}
 	onDeleted = (id) => {
 		console.log(id)
@@ -27,29 +35,52 @@ export default class App extends Component {
 		})
 	}
 	addItem = (text) =>{
-		text = "learn learn learn"
-		const item = [{
-			label: text,
-			important: false,
-			id: this.uniqueId++}]
-	
-		this.setState(({propertyList}) => {
-			const newArray = item.concat(propertyList);
+		text = "learn learn learn";	
+			const newArray = this.creationPropertyList(text);
+			this.setState(({propertyList}) => {
+			const newArr = [
+				...propertyList,
+				newArray
+			]
 			return {
-				propertyList: newArray
+				propertyList: newArr
 			}
 		}
 		)};
-		
+	changingProperties(arr, id, property){
+		const index = arr.findIndex((el) => el.id === id);
+		const oldArr = arr[index];
+		const newArr = {...oldArr, [property]: !oldArr[property]}
+		return [...arr.slice(0, index), newArr, ...arr.slice(index + 1)];
+	}	
+	onTogleImportant = (id) => {
+		this.setState(({ propertyList }) => {
+			return {
+				propertyList: this.changingProperties(propertyList, id, 'important')
+			}
+		})
+	};
+	onTogleDone = (id) => {
+		this.setState(({ propertyList }) => {
+			return {
+				propertyList: this.changingProperties(propertyList, id, 'done')
+			}
+		})
+	};	
 	render() {
+		const doneTask = this.state.propertyList.filter((el) => el.done).length;
+		const todoTask = this.state.propertyList.length - doneTask;
 		return (
 			<div className="todo-app">
-				<AppHeader toDo={1} done={3} />
+				<AppHeader toDo={todoTask} done={doneTask} />
 				<div className="top-panel d-flex">
 					<SearchPanel />
 					<ItemStatusFilter />
 				</div>
-				<TodoList todos={this.state.propertyList} onDeleted={this.onDeleted} />
+				<TodoList todos={this.state.propertyList} 
+							 onDeleted={this.onDeleted}
+							 onTogleImportant={this.onTogleImportant}
+							 onTogleDone={this.onTogleDone} />
 				<Additem todos={this.state.propertyList} addItem={this.addItem} />
 			</div>
 		)
