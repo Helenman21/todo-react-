@@ -14,7 +14,9 @@ export default class App extends Component {
 			this.creationPropertyList('Drink coffee'),
 			this.creationPropertyList("Learn React"), 
 			this.creationPropertyList("Build React App")
-		]
+		], 
+		term: '',
+		filter: 'все'
 	}
 	creationPropertyList(label) {
 		return {
@@ -35,7 +37,6 @@ export default class App extends Component {
 		})
 	}
 	addItem = (text) =>{
-		text = "learn learn learn";	
 			const newArray = this.creationPropertyList(text);
 			this.setState(({propertyList}) => {
 			const newArr = [
@@ -52,7 +53,8 @@ export default class App extends Component {
 		const oldArr = arr[index];
 		const newArr = {...oldArr, [property]: !oldArr[property]}
 		return [...arr.slice(0, index), newArr, ...arr.slice(index + 1)];
-	}	
+	}
+	
 	onTogleImportant = (id) => {
 		this.setState(({ propertyList }) => {
 			return {
@@ -67,21 +69,55 @@ export default class App extends Component {
 			}
 		})
 	};	
+	search(items, term) {
+		const isValid = term.length === 0;
+		if(isValid) {
+			return items
+		}
+		return items.filter((item) => {
+			return item.label
+			.toLowerCase()
+			.indexOf(term.toLowerCase()) > -1
+		})
+	}
+	onGhangeSearch = (term) => {
+		this.setState({ term })
+	}
+	onFilterChange = (filter) => {
+		this.setState({ filter })
+	}
+	filter(items, filter) {
+		switch(filter)  {
+			case 'все':
+				return items;
+				case 'не выполнено':
+					return items.filter((item) => !item.done);
+					case 'выполнено':
+						return items.filter((item) => item.done);
+						default:
+							return items;
+		}
+	}
 	render() {
-		const doneTask = this.state.propertyList.filter((el) => el.done).length;
-		const todoTask = this.state.propertyList.length - doneTask;
+		const { propertyList, term, filter } = this.state;
+		const visibleItems = this.filter(this.search(propertyList, term), filter)
+		const doneTask = propertyList.filter((el) => el.done).length;
+		const todoTask = propertyList.length - doneTask;
 		return (
 			<div className="todo-app">
 				<AppHeader toDo={todoTask} done={doneTask} />
 				<div className="top-panel d-flex">
-					<SearchPanel />
-					<ItemStatusFilter />
+					<SearchPanel onGhangeSearch={ this.onGhangeSearch } />
+					<ItemStatusFilter 
+						filter={filter} 
+						onFilterChange={this.onFilterChange} />
 				</div>
-				<TodoList todos={this.state.propertyList} 
+				<TodoList className="top-panel "
+							 todos={ visibleItems } 
 							 onDeleted={this.onDeleted}
 							 onTogleImportant={this.onTogleImportant}
 							 onTogleDone={this.onTogleDone} />
-				<Additem todos={this.state.propertyList} addItem={this.addItem} />
+				<Additem todos={ propertyList } addItem={this.addItem} />
 			</div>
 		)
 	}

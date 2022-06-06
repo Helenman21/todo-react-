@@ -13,12 +13,13 @@ export default class TodoList extends Component {
 					<TodoListItem {...itemProps}
 						onDeleted={() => onDeleted(id)}
 						onTogleDone={() => onTogleDone(id)}
-						onTogleImportant={() => onTogleImportant(id)} />
+						onTogleImportant={() => onTogleImportant(id)}
+						 />
 				</li>)
 		}
 		)
 		return (
-			<ul className="list-group todo-list">
+			<ul className="list-group todo-list ">
 				{elements}
 			</ul>
 		)

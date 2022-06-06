@@ -24,3 +24,8 @@
 .done {
 	text-decoration: line-through;
 }
+.todo-list-item {
+	display: flex;
+}
+
+
